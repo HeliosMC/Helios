@@ -21,4 +21,31 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
-module.exports = (Helios) => {};
+const { green, red, blue, yellow } = require("chalk");
+
+/**
+ * Function used to log the data.
+ * @param {*} data The information which will be logged.
+ * @param {*} level The severity of the log.
+ */
+module.exports = (data, level = "info") => {
+    let timestamp = new Date()
+        .toISOString()
+        .replace(/T/, " ")
+        .replace(/\..+/, "");
+
+    switch (level) {
+        case "success": {
+            return console.log(`[${timestamp}]: ${green("✔")}  ${data}`);
+        }
+        case "error": {
+            return console.log(`[${timestamp}]: ${red("✖")}  ${data}`);
+        }
+        case "warning": {
+            return console.log(`[${timestamp}]: ${yellow("⚠")}  ${data}`);
+        }
+        case "info": {
+            return console.log(`[${timestamp}]: ${blue("ℹ")}  ${data}`);
+        }
+    }
+};

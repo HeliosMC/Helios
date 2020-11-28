@@ -34,6 +34,7 @@ class Helios extends Client {
     constructor(options) {
         super(options);
 
+        this.logger = require("./Logger");
         this.helpers = require("../helpers/helpers");
         this.config = require("../config.json");
     }

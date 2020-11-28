@@ -32,7 +32,8 @@ const Helios = new (require("./core/Helios"))();
         eventModule = require(`./events/${event}`);
 
         // Register the event.
-        Helios.on(eventName, (...args) => eventModule(...args));
+        Helios.on(eventName, (...args) => eventModule(Helios, ...args));
+        Helios.logger(`${eventName} has been registered.`, "success");
     });
 })();
 
