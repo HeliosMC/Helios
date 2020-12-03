@@ -25,11 +25,14 @@ const Helios = new (require("./core/Helios"))();
 
 // Register all of the events/commands.
 (() => {
+    // Initialize the command manager.
+    Helios.commands = new Helios.commands(Helios);
+
     // Loop through each of the event modules.
     Helios.helpers.readDirectory("./events/", "js", (event) => {
         // Parse the event name and require the event.
-        eventName = event.split(".")[0];
-        eventModule = require(`./events/${event}`);
+        let eventName = event.split(".")[0];
+        let eventModule = require(`./events/${event}`);
 
         // Register the event.
         Helios.on(eventName, (...args) => eventModule(Helios, ...args));

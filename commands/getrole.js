@@ -21,32 +21,19 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
-const { Client } = require("discord.js");
 
-/**
- * The main class for interacting with the Discord API.
- * @extends {Client}
- */
-class Helios extends Client {
-    /**
-     * @param {*} options Optional arguments for the client.
-     */
-    constructor(options) {
-        super(options);
+module.exports = {
+    info: {
+        name: "getrole",
+        permission: "founder",
+    },
+    execute: (msg) => {
+        // Get the role from the mentions.
+        if (msg.mentions.roles.size == 0)
+            return msg.reply("You need to mention a role :man_facepalming:");
+        let role = msg.mentions.roles.first();
 
-        this.helpers = require("../helpers/helpers");
-        this.logger = require("./Logger");
-        this.commands = require("./Commands");
-        this.config = require("../config.json");
-    }
-
-    /**
-     * Authenticates with the discord gateway using the original function from the extended class but supplies the token from config.
-     * @returns {Promise<string>} Token of the account.
-     */
-    login = () => {
-        return super.login(this.config.token);
-    };
-}
-
-module.exports = Helios;
+        // Reply with the id of the role.
+        msg.reply(`The role id is: \`${role.id}\``);
+    },
+};

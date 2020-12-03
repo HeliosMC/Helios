@@ -21,32 +21,44 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
-const { Client } = require("discord.js");
 
 /**
- * The main class for interacting with the Discord API.
- * @extends {Client}
+ * The main class for handling all of the commands.
  */
-class Helios extends Client {
+class Commands {
     /**
-     * @param {*} options Optional arguments for the client.
+     * @param {*} helios The main class of the client.
      */
-    constructor(options) {
-        super(options);
+    constructor(helios) {
+        this.helios = helios;
+        this.registered = {};
 
-        this.helpers = require("../helpers/helpers");
-        this.logger = require("./Logger");
-        this.commands = require("./Commands");
-        this.config = require("../config.json");
+        this.register();
     }
 
     /**
-     * Authenticates with the discord gateway using the original function from the extended class but supplies the token from config.
-     * @returns {Promise<string>} Token of the account.
+     * Registers all of the commands which are contained in /commands
      */
-    login = () => {
-        return super.login(this.config.token);
+    register = () => {
+        this.registered = {};
+
+        this.helios.helpers.readDirectory("./commands/", "js", (command) => {
+            let module = require(`../commands/${command}`);
+            this.registered[module.info.name] = module;
+        });
+    };
+
+    /**
+     * Returns the command module for the specific name.
+     * @param {*} name The name of the command to retrieve.
+     */
+    get = (name) => {
+        for (var key in this.registered) {
+            if (key == name && this.registered.hasOwnProperty(key)) {
+                return this.registered[key];
+            }
+        }
     };
 }
 
-module.exports = Helios;
+module.exports = Commands;

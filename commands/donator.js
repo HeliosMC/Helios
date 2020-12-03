@@ -21,32 +21,27 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
-const { Client } = require("discord.js");
 
-/**
- * The main class for interacting with the Discord API.
- * @extends {Client}
- */
-class Helios extends Client {
-    /**
-     * @param {*} options Optional arguments for the client.
-     */
-    constructor(options) {
-        super(options);
+module.exports = {
+    info: {
+        name: "donator",
+        permission: "staff",
+    },
+    execute: (msg) => {
+        // Get the user from the mentions.
+        if (msg.mentions.members.size == 0)
+            return msg.reply("You need to mention a user :man_facepalming:");
+        let member = msg.mentions.members.first();
 
-        this.helpers = require("../helpers/helpers");
-        this.logger = require("./Logger");
-        this.commands = require("./Commands");
-        this.config = require("../config.json");
-    }
+        // Get the donator role.
+        let role = msg.guild.roles.cache.filter(
+            (role) => role.name === "Donator"
+        );
+        if (!role) return msg.reply("Unable to fetch the role.");
 
-    /**
-     * Authenticates with the discord gateway using the original function from the extended class but supplies the token from config.
-     * @returns {Promise<string>} Token of the account.
-     */
-    login = () => {
-        return super.login(this.config.token);
-    };
-}
-
-module.exports = Helios;
+        // Give the member the role.
+        member.roles
+            .add(role)
+            .then(msg.reply("The role has been given to the user."));
+    },
+};

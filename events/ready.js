@@ -21,4 +21,9 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
-module.exports = (Helios) => {};
+module.exports = (helios) => {
+    helios.user.setPresence({
+        activity: { name: "play.heliosmc.co.uk", type: "PLAYING" },
+        status: "online",
+    });
+};
