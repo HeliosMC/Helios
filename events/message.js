@@ -41,18 +41,24 @@ module.exports = (Helios, msg) => {
 
     // Check permissions.
     if (module.info.permission != undefined || module.info.permission == "") {
+        // Loop through the users roles.
+        let foundRole =
+            module.info.permission == "founder" &&
+            msg.author.id == msg.guild.ownerID;
+
         // Get the roles required for the permission.
         let roles = Helios.config.permissions[module.info.permission];
-        if (!roles) return;
-
-        // Loop through the users roles.
-        let foundRole = false;
-        msg.member.roles.cache.map((role) => {
-            if (roles.includes(role.id)) foundRole = true;
-        });
+        if (roles && !foundRole) {
+            msg.member.roles.cache.map((role) => {
+                if (roles.includes(role.id)) foundRole = true;
+            });
+        }
 
         // Check if found role.
-        if (!foundRole) return;
+        if (!foundRole)
+            return msg.reply(
+                "Naughty! You don't have the required role :eyes:"
+            );
     }
 
     // Execute the function.
