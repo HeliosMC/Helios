@@ -22,8 +22,10 @@
     SOFTWARE.
 */
 module.exports = (helios) => {
-    helios.user.setPresence({
-        activity: { name: "play.heliosmc.co.uk", type: "PLAYING" },
-        status: "online",
-    });
+    setInterval(() => {
+        helios.user.setPresence({
+            activity: { name: "play.heliosmc.co.uk", type: "PLAYING" },
+            status: "online",
+        });
+    }, (1 * (60 * 1000))) // Execute every 1 minute.
 };
