@@ -37,7 +37,11 @@ module.exports = (Helios, msg) => {
 
     // Retrieve the command module.
     let module = Helios.commands.get(command);
-    if (!module) return;
+    if (!module) {
+        // Check if it is a category command.
+        module = Helios.commands.get(args[0], command);
+        if(!module) return;
+    }
 
     // Check permissions.
     if (module.info.permission != undefined || module.info.permission == "") {
