@@ -41,7 +41,7 @@ module.exports = async (Helios, reaction, user) => {
     if (emoji.id !== Helios.config.tickets.emoji) return;
 
     // Check if it is a actual ticket message.
-    let ticketIndex = 0;
+    let ticketIndex = undefined;
     await Helios.mongoose.get().then(async (mongoose) => {
         try {
             const result = await ticketGuildSchema.findOne({
@@ -54,6 +54,7 @@ module.exports = async (Helios, reaction, user) => {
             mongoose.connection.close();
         }
     });
+    if (ticketIndex == undefined) return;
 
     // Probably the worst way ever but o well.
     let foundTicket = false;
