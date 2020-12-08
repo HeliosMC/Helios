@@ -30,7 +30,7 @@ module.exports = {
     execute: (msg) => {
         // Get the user from the mentions.
         if (msg.mentions.members.size == 0)
-            return msg.reply("You need to mention a user :man_facepalming:");
+            return msg.reply("You need to mention an user :man_facepalming:");
         let member = msg.mentions.members.first();
 
         // Get the donator role.
