@@ -41,8 +41,8 @@ module.exports = {
                 if (!result) return;
 
                 result.map((ticket) => {
-                    leaderboard[ticket.userId] = leaderboard[ticket.userId]
-                        ? leaderboard[ticket.userId] + 1
+                    leaderboard[ticket.closedBy] = leaderboard[ticket.closedBy]
+                        ? leaderboard[ticket.closedBy] + 1
                         : 1;
                 });
             } finally {
@@ -72,7 +72,7 @@ module.exports = {
         leaderboard.map((entry, index) => {
             output += `\`${index + 1}.\` <:${emoji.name}:${emoji.id}> \`${
                 entry[1]
-            } Tickets\`  <@${entry[0]}>`;
+            } Tickets\`  <@${entry[0]}>\n`;
         });
 
         // Output the data with a embed.
