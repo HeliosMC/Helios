@@ -21,6 +21,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
+const Discord = require("discord.js");
+const ticketSchema = require("../../db/schemas/ticketGuildSchema");
 
 module.exports = {
     info: {
@@ -28,7 +30,44 @@ module.exports = {
         category: "ticket",
         permission: "founder",
     },
-    execute: (msg) => {
-        msg.reply("woo it works")
+    execute: async (msg, Helios) => {
+        // TODO: Proper emoji configuration which saves in the database - i was too lazy.
+        let guildId = msg.guild.id;
+        let emoji = msg.guild.emojis.cache.find(
+            (emoji) => emoji.id === Helios.config.tickets.emoji
+        );
+
+        const ticketEmbed = new Discord.MessageEmbed()
+            .setTitle("Server Support")
+            .setDescription(
+                `React with the <:${emoji.name}:${emoji.id}> to create a ticket!`
+            )
+            .setColor("#3498db")
+            .setFooter(
+                "Your ticket will be located at the top of discord.",
+                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
+            );
+        let ticketMessage = await msg.channel.send(ticketEmbed);
+        ticketMessage.react(emoji);
+
+        await Helios.mongoose.get().then(async (mongoose) => {
+            try {
+                await ticketSchema.findOneAndUpdate(
+                    {
+                        _id: guildId,
+                    },
+                    {
+                        _id: guildId,
+                        messageId: ticketMessage.id,
+                    },
+                    {
+                        upsert: true,
+                        setDefaultsOnInsert: true,
+                    }
+                );
+            } finally {
+                mongoose.connection.close();
+            }
+        });
     },
 };

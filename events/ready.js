@@ -27,5 +27,5 @@ module.exports = (helios) => {
             activity: { name: "play.heliosmc.co.uk", type: "PLAYING" },
             status: "online",
         });
-    }, (1 * (60 * 1000))) // Execute every 1 minute.
+    }, 1 * (60 * 1000)); // Execute every 1 minute.
 };

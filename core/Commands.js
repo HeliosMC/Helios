@@ -26,52 +26,58 @@
  * The main class for handling all of the commands.
  */
 class Commands {
-  /**
-   * @param {*} helios The main class of the client.
-   */
-  constructor(helios) {
-    this.helios = helios;
-    this.registered = {};
+    /**
+     * @param {*} helios The main class of the client.
+     */
+    constructor(helios) {
+        this.helios = helios;
+        this.registered = {};
 
-    this.register();
-  }
+        this.register();
+    }
 
-  /**
-   * Registers all of the commands which are contained in /commands
-   */
-  register = () => {
-    this.registered = [];
+    /**
+     * Registers all of the commands which are contained in /commands
+     */
+    register = () => {
+        this.registered = [];
 
-    this.helios.helpers.readDirectory("./commands/", undefined, (command) => {
-      // Check the extension of the object.
-      if (command.split(".")[1] == "js") {
-        // Register the command.
-        let module = require(`../commands/${command}`);
-        this.registered.push(module);
-      } else {
-        // Found a directory which indicates a category.
-        let path = `./commands/${command}/`;
-        this.helios.helpers.readDirectory(path, "js", (command) => {
-          // Register the category command.
-          let module = require(`.${path}/${command}`);
-          this.registered.push(module);
-        });
-      }
-    });
-  };
+        this.helios.helpers.readDirectory(
+            "./commands/",
+            undefined,
+            (command) => {
+                // Check the extension of the object.
+                if (command.split(".")[1] == "js") {
+                    // Register the command.
+                    let module = require(`../commands/${command}`);
+                    this.registered.push(module);
+                } else {
+                    // Found a directory which indicates a category.
+                    let path = `./commands/${command}/`;
+                    this.helios.helpers.readDirectory(path, "js", (command) => {
+                        // Register the category command.
+                        let module = require(`.${path}/${command}`);
+                        this.registered.push(module);
+                    });
+                }
+            }
+        );
+    };
 
-  /**
-   * Returns the command module for the specific name & category.
-   * @param {*} name The name of the command to retrieve.
-   * @param {*} category The category of where to search for the command.
-   */
-  get = (name, category) => {
-    let commands =
-      category !== undefined
-        ? this.registered.filter((command) => command.info.category == category)
-        : this.registered;
-    return commands.filter((command) => command.info.name == name)[0];
-  };
+    /**
+     * Returns the command module for the specific name & category.
+     * @param {*} name The name of the command to retrieve.
+     * @param {*} category The category of where to search for the command.
+     */
+    get = (name, category) => {
+        let commands =
+            category !== undefined
+                ? this.registered.filter(
+                      (command) => command.info.category == category
+                  )
+                : this.registered;
+        return commands.filter((command) => command.info.name == name)[0];
+    };
 }
 
 module.exports = Commands;

@@ -38,6 +38,7 @@ class Helios extends Client {
         this.logger = require("./Logger");
         this.commands = require("./Commands");
         this.config = require("../config.json");
+        this.mongoose = require("../db/Mongoose");
     }
 
     /**

@@ -40,7 +40,7 @@ module.exports = (Helios, msg) => {
     if (!module) {
         // Check if it is a category command.
         module = Helios.commands.get(args[0], command);
-        if(!module) return;
+        if (!module) return;
     }
 
     // Check permissions.
@@ -66,5 +66,5 @@ module.exports = (Helios, msg) => {
     }
 
     // Execute the function.
-    module.execute(msg);
+    module.execute(msg, Helios);
 };

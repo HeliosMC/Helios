@@ -21,10 +21,15 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
-const Helios = new (require("./core/Helios"))();
+const Helios = new (require("./core/Helios"))({
+    partials: ["MESSAGE", "CHANNEL", "REACTION"],
+});
 
 // Register all of the events/commands.
 (() => {
+    // Initialize the database.
+    Helios.mongoose = new Helios.mongoose(Helios);
+
     // Initialize the command manager.
     Helios.commands = new Helios.commands(Helios);
 

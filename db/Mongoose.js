@@ -21,24 +21,25 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
-const fs = require("fs");
+const mongoose = require("mongoose");
 
-/**
- * Return all of the files in a directory with the specific extension.
- * @param {*} path The directory of the files.
- * @param {*} extension Filter the files by the extension.
- * @param {*} callback Called for each file.
- */
-module.exports = (path, extension, callback) => {
-    fs.readdir(path, (err, files) => {
-        files.forEach((file) => {
-            if (extension !== undefined) {
-                if (file.split(".")[1] == extension) {
-                    callback(file);
-                }
-            } else {
-                callback(file);
-            }
+class Mongoose {
+    constructor(helios) {
+        this.helios = helios;
+    }
+
+    get = async () => {
+        let path = this.helios.config.mongoConnection;
+        if (!path)
+            this.helios.logger("unable to fetch mongodb connection", "error");
+
+        await mongoose.connect(path, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false,
         });
-    });
-};
+        return mongoose;
+    };
+}
+
+module.exports = Mongoose;
