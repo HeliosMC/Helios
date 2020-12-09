@@ -33,6 +33,7 @@ function pad(n, width, z) {
 }
 
 module.exports = async (Helios, reaction, user) => {
+    let mongoose = Helios.mongoose;
     let msg = reaction.message;
     let emoji = reaction.emoji;
 
@@ -41,20 +42,9 @@ module.exports = async (Helios, reaction, user) => {
     if (emoji.id !== Helios.config.tickets.emoji) return;
 
     // Check if it is a actual ticket message.
-    let ticketIndex = undefined;
-    await Helios.mongoose.get().then(async (mongoose) => {
-        try {
-            const result = await ticketGuildSchema.findOne({
-                _id: msg.guild.id,
-            });
-            if (!result) return;
-            if (result.messageId !== msg.id) return;
-            ticketIndex = result.ticketIndex;
-        } finally {
-            mongoose.connection.close();
-        }
-    });
-    if (ticketIndex == undefined) return;
+    const guildData = await mongoose.getTicketGuild(msg.guild.id);
+    if (!guildData || guildData.messageId !== msg.id) return;
+    let ticketIndex = guildData.ticketIndex;
 
     // Probably the worst way ever but o well.
     let foundTicket = false;
@@ -69,24 +59,7 @@ module.exports = async (Helios, reaction, user) => {
     if (foundTicket) return;
 
     // Update the index.
-    await Helios.mongoose.get().then(async (mongoose) => {
-        try {
-            await ticketGuildSchema.findOneAndUpdate(
-                {
-                    _id: msg.guild.id,
-                },
-                {
-                    ticketIndex: ticketIndex + 1,
-                },
-                {
-                    upsert: true,
-                    setDefaultsOnInsert: true,
-                }
-            );
-        } finally {
-            mongoose.connection.close();
-        }
-    });
+    await mongoose.updateTicketGuildIndex(msg.guild.id, ticketIndex + 1);
 
     // Open a ticket as it does not exist.
     let permissionOverwrites = [
@@ -115,17 +88,7 @@ module.exports = async (Helios, reaction, user) => {
     );
 
     // Save the ticket to the channels database.
-    await Helios.mongoose.get().then(async (mongoose) => {
-        try {
-            await new ticketChannelSchema({
-                _id: channel.id,
-                userId: user.id,
-                tag: user.tag,
-            }).save();
-        } finally {
-            mongoose.connection.close();
-        }
-    });
+    await mongoose.saveTicketChannel(channel.id, user.id, user.tag);
 
     // Send a introduction message to the channel.
     const ticketEmbed = new Discord.MessageEmbed()
@@ -137,4 +100,7 @@ module.exports = async (Helios, reaction, user) => {
             "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
         );
     channel.send(`<@${user.id}>`, ticketEmbed);
+
+    // Remove the reaction.
+    await reaction.users.remove(user.id);
 };

@@ -22,7 +22,6 @@
     SOFTWARE.
 */
 const Discord = require("discord.js");
-const ticketSchema = require("../../db/schemas/ticketGuildSchema");
 
 module.exports = {
     info: {
@@ -30,11 +29,11 @@ module.exports = {
         category: "ticket",
         permission: "founder",
     },
-    execute: async (msg, Helios) => {
+    execute: async (msg, { config, mongoose }) => {
         // TODO: Proper emoji configuration which saves in the database - i was too lazy.
         let guildId = msg.guild.id;
         let emoji = msg.guild.emojis.cache.find(
-            (emoji) => emoji.id === Helios.config.tickets.emoji
+            (emoji) => emoji.id === config.tickets.emoji
         );
 
         const ticketEmbed = new Discord.MessageEmbed()
@@ -50,24 +49,6 @@ module.exports = {
         let ticketMessage = await msg.channel.send(ticketEmbed);
         ticketMessage.react(emoji);
 
-        await Helios.mongoose.get().then(async (mongoose) => {
-            try {
-                await ticketSchema.findOneAndUpdate(
-                    {
-                        _id: guildId,
-                    },
-                    {
-                        _id: guildId,
-                        messageId: ticketMessage.id,
-                    },
-                    {
-                        upsert: true,
-                        setDefaultsOnInsert: true,
-                    }
-                );
-            } finally {
-                mongoose.connection.close();
-            }
-        });
+        await mongoose.updateTicketGuildMessage(guildId, ticketMessage.id);
     },
 };

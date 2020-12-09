@@ -31,25 +31,19 @@ module.exports = {
         category: "ticket",
         permission: "staff",
     },
-    execute: async (msg, Helios) => {
+    execute: async (msg, { config, mongoose }) => {
         let leaderboard = {};
 
         // Grab the data from the mongodb.
-        await Helios.mongoose.get().then(async (mongoose) => {
-            try {
-                const result = await ticketChannelSchema.find();
-                if (!result) return;
+        const result = await mongoose.fetchTicketChannels();
+        if (!result) return;
 
-                result.map((ticket) => {
-                    if (!ticket.closedBy) return;
+        result.map((ticket) => {
+            if (!ticket.closedBy) return;
 
-                    leaderboard[ticket.closedBy] = leaderboard[ticket.closedBy]
-                        ? leaderboard[ticket.closedBy] + 1
-                        : 1;
-                });
-            } finally {
-                mongoose.connection.close();
-            }
+            leaderboard[ticket.closedBy] = leaderboard[ticket.closedBy]
+                ? leaderboard[ticket.closedBy] + 1
+                : 1;
         });
 
         // Create a leaderboard array.
@@ -66,7 +60,7 @@ module.exports = {
         leaderboard = data;
 
         let emoji = msg.guild.emojis.cache.find(
-            (emoji) => emoji.id === Helios.config.tickets.emoji
+            (emoji) => emoji.id === config.tickets.emoji
         );
 
         // Setup a string of data.

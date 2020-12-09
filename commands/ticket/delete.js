@@ -31,7 +31,7 @@ module.exports = {
         category: "ticket",
         permission: "staff",
     },
-    execute: async (msg, Helios) => {
+    execute: async (msg, { config, mongoose }) => {
         // Check if this is a ticket channel.
         if (!msg.channel.name.includes("ticket-"))
             return msg.reply(
@@ -39,7 +39,7 @@ module.exports = {
             );
 
         // Fetch all of the messages and save them in a file.
-        const path = `${Helios.config.tickets.path}/${msg.guild.id}/`;
+        const path = `${config.tickets.path}/${msg.guild.id}/`;
         msg.channel.messages.fetch().then((messages) => {
             let transcript = [];
 
@@ -63,23 +63,13 @@ module.exports = {
         });
 
         // Save the channel data to the database.
-        let username;
-        await Helios.mongoose.get().then(async (mongoose) => {
-            try {
-                const result = await ticketChannelSchema.findOneAndUpdate(
-                    {
-                        _id: msg.channel.id,
-                    },
-                    {
-                        transcript: `${Helios.config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt`,
-                        closedBy: msg.author.id,
-                    }
-                );
-                username = result.tag;
-            } finally {
-                mongoose.connection.close();
-            }
-        });
+        let username = (
+            await mongoose.updateTicketChannel(
+                msg.channel.id,
+                `${config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt`,
+                msg.author.id
+            )
+        ).tag;
 
         // Log the transcript to the channel.
         const ticketEmbed = new Discord.MessageEmbed()
@@ -90,7 +80,7 @@ module.exports = {
                 { name: "Closed By", value: msg.author.tag, inline: true },
                 {
                     name: "Transcript",
-                    value: `[Click here](${Helios.config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt)`,
+                    value: `[Click here](${config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt)`,
                     inline: true,
                 }
             )
@@ -101,7 +91,7 @@ module.exports = {
                 "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
             );
         await msg.guild.channels.cache
-            .find((channel) => channel.id === Helios.config.tickets.log)
+            .find((channel) => channel.id === config.tickets.log)
             .send(ticketEmbed);
 
         // Delete the channel.

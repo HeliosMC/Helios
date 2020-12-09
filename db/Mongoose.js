@@ -22,23 +22,121 @@
     SOFTWARE.
 */
 const mongoose = require("mongoose");
+const ticketChannelSchema = require("./schemas/ticketChannelSchema");
+const ticketGuildSchema = require("./schemas/ticketGuildSchema");
 
+/**
+ * The main class for interacting with the MongoDB.
+ */
 class Mongoose {
+    /**
+     * Opens the connection to the mongodb.
+     * @param {*} helios The helios class which contains all of the major classes/etc.
+     */
     constructor(helios) {
         this.helios = helios;
+        this.connect();
     }
 
-    get = async () => {
+    connect = async () => {
         let path = this.helios.config.mongoConnection;
         if (!path)
-            this.helios.logger("unable to fetch mongodb connection", "error");
+            this.helios.logger("unable to fetch mongodb connection.", "error");
+
+        this.db = mongoose.connection;
+        this.db.once("open", () =>
+            this.helios.logger("connection to database established.", "success")
+        );
 
         await mongoose.connect(path, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useFindAndModify: false,
         });
-        return mongoose;
+    };
+
+    getTicketGuild = async (guildId) => {
+        try {
+            return await ticketGuildSchema.findOne({
+                _id: guildId,
+            });
+        } catch (e) {
+            this.helios.logger("failed to fetch ticket guild data", "error");
+        }
+    };
+
+    updateTicketGuildMessage = async (guildId, newMessage) => {
+        try {
+            await ticketGuildSchema.findOneAndUpdate(
+                {
+                    _id: guildId,
+                },
+                {
+                    _id: guildId,
+                    messageId: newMessage,
+                },
+                {
+                    upsert: true,
+                    setDefaultsOnInsert: true,
+                }
+            );
+        } catch (e) {
+            this.helios.logger(
+                "failed to update ticket guild message.",
+                "error"
+            );
+        }
+    };
+
+    updateTicketGuildIndex = async (guildId, newIndex) => {
+        try {
+            await ticketGuildSchema.findOneAndUpdate(
+                {
+                    _id: guildId,
+                },
+                {
+                    ticketIndex: newIndex,
+                }
+            );
+        } catch (e) {
+            this.helios.logger("failed to update ticket guild index.", "error");
+        }
+    };
+
+    saveTicketChannel = async (channelId, userId, userTag) => {
+        try {
+            await new ticketChannelSchema({
+                _id: channelId,
+                userId: userId,
+                tag: userTag,
+            }).save();
+        } catch (e) {
+            this.helios.logger("failed to save ticket channel.", "error");
+        }
+    };
+
+    updateTicketChannel = async (channelId, transcript, closedBy) => {
+        try {
+            return await ticketChannelSchema.findOneAndUpdate(
+                {
+                    _id: channelId,
+                },
+                {
+                    transcript,
+                    closedBy,
+                }
+            );
+        } catch (e) {
+            this.helios.logger("failed to update ticket channel.", "error");
+        }
+    };
+
+    fetchTicketChannels = async () => {
+        try {
+            return await ticketChannelSchema.find();
+        } catch (e) {
+            this.helios.logger("failed to fetch ticket channels.", "error");
+        }
     };
 }
 
