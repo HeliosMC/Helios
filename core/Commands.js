@@ -76,7 +76,7 @@ class Commands {
                       (command) => command.info.category == category
                   )
                 : this.registered;
-        return commands.filter((command) => command.info.name == name)[0];
+        return commands.find((command) => command.info.name == name);
     };
 }
 
