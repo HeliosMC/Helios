@@ -57,11 +57,6 @@ module.exports = {
                 paginatedTickets.length > 0
                     ? `<@${member.id}> has a history of ${paginatedTickets.length} tickets :eyes:`
                     : `Looks like this page is empty :face_with_hand_over_mouth:`
-                /*
-                tickets.length > 0
-                    ? `<@${member.id}> has a history of ${paginatedTickets.length} tickets :eyes:`
-                    : `Looks like <@${member.id}> has a clean history :thinking:`
-                    */
             )
             .setFooter(
                 `You can access other pages by specifying the page number.`,
@@ -72,7 +67,7 @@ module.exports = {
         // Update fields.
         paginatedTickets.map((entry, index) => {
             historyEmbed.addField(
-                `Ticket #${index + 1}`,
+                `Ticket #${pageNumber - 1 + index + 1}`,
                 `Transcript: [Click here](${entry.transcript})\nClosed By: <@${entry.closedBy}>`
             );
         });
