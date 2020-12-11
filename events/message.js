@@ -66,5 +66,5 @@ module.exports = (Helios, msg) => {
     }
 
     // Execute the function.
-    module.execute(msg, Helios);
+    module.execute(msg, Helios, args);
 };
