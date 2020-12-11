@@ -34,7 +34,7 @@ module.exports = {
                 `Want to contribute to the project? [Click here](https://github.com/AAigars/Helios)`
             )
             .setFooter(
-                `Created by Luaa#0381`,
+                `Created by Luaa#0381 (Aigars A)`,
                 "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
             )
             .setColor("#3498db");
