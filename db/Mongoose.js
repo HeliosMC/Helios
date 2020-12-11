@@ -41,7 +41,10 @@ class Mongoose {
     connect = async () => {
         let path = this.helios.config.mongoConnection;
         if (!path)
-            this.helios.logger("unable to fetch mongodb connection.", "error");
+            return this.helios.logger(
+                "no path for mongodb has been provided",
+                "error"
+            );
 
         this.db = mongoose.connection;
         this.db.once("open", () =>
