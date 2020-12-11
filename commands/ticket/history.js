@@ -41,7 +41,9 @@ module.exports = {
         // Retrieve all of the tickets from a user.
         let tickets = await mongoose.fetchTicketChannels();
         if (!tickets) return;
-        tickets = tickets.filter((ticket) => ticket.userId == member.id);
+        tickets = tickets.filter(
+            (ticket) => ticket.userId == member.id && ticket.closedBy
+        );
 
         // Paginate the array.
         let paginatedTickets = tickets.slice(
