@@ -39,7 +39,8 @@ module.exports = {
         if (!result) return;
 
         result.map((ticket) => {
-            if (!ticket.closedBy) return;
+            if (!ticket.closedBy || !ticket.userId) return;
+            if (ticket.closedBy == ticket.userId) return;
 
             leaderboard[ticket.closedBy] = leaderboard[ticket.closedBy]
                 ? leaderboard[ticket.closedBy] + 1
