@@ -76,7 +76,10 @@ class Commands {
                       (command) => command.info.category == category
                   )
                 : this.registered;
-        return commands.find((command) => command.info.name == name);
+        return commands.find(
+            (command) =>
+                command.info.name == name && command.info.category == category
+        );
     };
 }
 
