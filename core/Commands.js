@@ -70,13 +70,7 @@ class Commands {
      * @param {*} category The category of where to search for the command.
      */
     get = (name, category) => {
-        let commands =
-            category !== undefined
-                ? this.registered.filter(
-                      (command) => command.info.category == category
-                  )
-                : this.registered;
-        return commands.find(
+        return this.registered.find(
             (command) =>
                 command.info.name == name && command.info.category == category
         );
