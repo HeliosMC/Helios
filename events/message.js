@@ -40,7 +40,7 @@ module.exports = (Helios, msg) => {
     if (!module) {
         // Check if it is a category command.
         module = Helios.commands.get(args[0], command);
-        if (!module) return;
+        if (!module || module.length > 1) return;
     }
 
     // Check permissions.
