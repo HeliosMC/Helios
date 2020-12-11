@@ -24,7 +24,7 @@
 module.exports = (helios) => {
     setInterval(() => {
         helios.user.setPresence({
-            activity: { name: "play.heliosmc.co.uk", type: "PLAYING" },
+            activity: { name: "h!help", type: "LISTENING" },
             status: "online",
         });
     }, 1 * (60 * 1000)); // Execute every 1 minute.
