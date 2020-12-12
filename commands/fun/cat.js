@@ -29,12 +29,13 @@ module.exports = {
         name: "cat",
         category: "fun",
     },
-    execute: async (msg, { config, mongoose }, args) => {
+    execute: async (msg, {}, args) => {
         // Get the cat from http request.
         const response = await axios.get("https://api.thecatapi.com/v1/images/search");
 
         // Create a embed for the response.
         const responseEmbed = new Discord.MessageEmbed()
+            .setDescription("Here is your cute cat :face_with_hand_over_mouth:")
             .setImage(response.data[0].url)
             .setColor("#3498db");
 
