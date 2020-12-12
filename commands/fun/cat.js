@@ -35,7 +35,7 @@ module.exports = {
 
         // Create a embed for the response.
         const responseEmbed = new Discord.MessageEmbed()
-            .setImage(response[0].url)
+            .setImage(response.data[0].url)
             .setColor("#3498db");
 
         // Send the embed.
