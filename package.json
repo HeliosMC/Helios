@@ -9,6 +9,7 @@
     "author": "Aigars",
     "license": "MIT",
     "dependencies": {
+        "axios": "^0.21.0",
         "chalk": "^4.1.0",
         "discord.js": "^12.5.1",
         "mongoose": "^5.11.5",
