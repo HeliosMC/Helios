@@ -22,8 +22,6 @@
     SOFTWARE.
 */
 const Discord = require("discord.js");
-const fs = require("fs");
-const ticketChannelSchema = require("../../db/schemas/ticketChannelSchema");
 
 module.exports = {
     info: {
