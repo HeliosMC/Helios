@@ -27,7 +27,7 @@ module.exports = {
         permission: "staff+",
     },
     execute: async (msg, { commands }, args) => {
-        let content = msg.split(" ");
+        let content = msg.content.split(" ");
         content.shift();
 
         msg.channel.send(content);
