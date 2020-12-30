@@ -30,6 +30,6 @@ module.exports = {
         let content = msg.content.split(" ");
         content.shift();
 
-        msg.channel.send(content);
+        msg.channel.send(content.join(" "));
     },
 };
