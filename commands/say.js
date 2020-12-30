@@ -31,5 +31,6 @@ module.exports = {
         content.shift();
 
         msg.channel.send(content.join(" "));
+        msg.delete();
     },
 };
