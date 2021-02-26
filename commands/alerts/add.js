@@ -21,16 +21,32 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
+const Discord = require("discord.js");
+
 module.exports = {
     info: {
-        name: "say",
-        permission: "staff+",
+        name: "add",
+        category: "alerts",
+        permission: "founder",
     },
-    execute: async (msg) => {
-        let content = msg.content.split(" ");
-        content.shift();
+    execute: async (msg, { mongoose }, args) => {
+        // Check the the size of args.
+        if(args.length <= 1)
+            return msg.reply(
+                "You need to specify a name for the alert :man_facepalming:"
+            );
+        else if(args.length <= 2)
+            return msg.reply(
+                "You need to specify a description for the alert :man_facepalming:"
+            );
+        
+        // Parse the arguments.
+        let name = args[1];
+        let description = args.slice(2).join(" ");
 
-        msg.channel.send(content.join(" "));
-        msg.delete();
+        // TODO: Add to the mongoose database.
+
+        // Reply that the alert has been registered.
+        msg.reply("The alert has been registered :clap:");
     },
 };

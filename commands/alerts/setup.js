@@ -21,16 +21,15 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
+const Discord = require("discord.js");
+
 module.exports = {
     info: {
-        name: "say",
-        permission: "staff+",
+        name: "setup",
+        category: "alerts",
+        permission: "founder",
     },
-    execute: async (msg) => {
-        let content = msg.content.split(" ");
-        content.shift();
+    execute: async (msg, { mongoose }) => {
 
-        msg.channel.send(content.join(" "));
-        msg.delete();
     },
 };
