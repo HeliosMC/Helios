@@ -29,6 +29,7 @@ module.exports = {
         name: "delete",
         category: "ticket",
         permission: "staff",
+        alias: ["close"],
     },
     execute: async (msg, { config, mongoose }) => {
         // Check if this is a ticket channel.

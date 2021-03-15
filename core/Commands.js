@@ -73,7 +73,9 @@ class Commands {
         return name
             ? this.registered.find(
                   (command) =>
-                      command.info.name == name &&
+                      (command.info.name == name ||
+                          (command.info.alias != undefined &&
+                              command.info.alias.includes(name))) &&
                       command.info.category == category
               )
             : this.registered;
