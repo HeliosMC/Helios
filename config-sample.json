@@ -2,10 +2,13 @@
     "token": "",
     "prefix": "h!",
     "permissions": {
-        "staff": [
-            "698226260320452662",
-            "734074632520597565",
-            "735935798557409372"
-        ]
-    }
+        "staff": []
+    },
+    "tickets": {
+        "web": "",
+        "path": "",
+        "emoji": "",
+        "log": ""
+    },
+    "mongoConnection": ""
 }

@@ -68,6 +68,16 @@ class Mongoose {
         }
     };
 
+    getTicketChannel = async (channelId) => {
+        try {
+            return await ticketChannelSchema.findOne({
+                _id: channelId,
+            });
+        } catch (e) {
+            this.helios.logger("failed to fetch ticket channel", "error");
+        }
+    };
+
     updateTicketGuildMessage = async (guildId, newMessage) => {
         try {
             await ticketGuildSchema.findOneAndUpdate(
