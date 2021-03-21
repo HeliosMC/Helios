@@ -73,21 +73,24 @@ module.exports = {
 
         // Log the transcript to the channel.
         const ticketEmbed = new Discord.MessageEmbed()
-            .addFields(
-                { name: "Username", value: username, inline: true },
-                { name: "Closed By", value: msg.author.tag, inline: true },
-                {
-                    name: "Transcript",
-                    value: `[Click here](${config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt)`,
-                    inline: true,
-                }
-            )
             .setColor("#3498db")
             .setTimestamp()
             .setFooter(
                 msg.channel.name,
                 "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
             );
+        if(args.length >= 2) {
+            ticketEmbed.addField("Reason", args.splice(1).join(" "), true);
+        }
+        ticketEmbed.addFields(
+            { name: "Username", value: username, inline: true },
+            { name: "Closed By", value: msg.author.tag, inline: true },
+            {
+                name: "Transcript",
+                value: `[Click here](${config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt)`,
+                inline: true,
+            }
+        );
         await msg.guild.channels.cache
             .find((channel) => channel.id === config.tickets.log)
             .send(ticketEmbed);

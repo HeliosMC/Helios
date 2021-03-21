@@ -45,6 +45,12 @@ module.exports = {
                 : 1;
         });
 
+        // Check if the user in the leaderboard is still staff.
+        leaderboard.map(entry => {
+            let member = await msg.guild.members.fetch(entry.closedBy);
+            if(!member) return;
+        });
+
         // Create a leaderboard array.
         let data = Object.keys(leaderboard).map((key) => {
             return [key, leaderboard[key]];
