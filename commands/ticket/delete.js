@@ -73,6 +73,7 @@ module.exports = {
 
         // Log the transcript to the channel.
         const ticketEmbed = new Discord.MessageEmbed()
+            .addField("Username", username, true)
             .setColor("#3498db")
             .setTimestamp()
             .setFooter(
@@ -114,7 +115,6 @@ module.exports = {
 
         // Log to transcript channel.
         ticketEmbed.addFields(
-            { name: "Username", value: username, inline: true },
             { name: "Closed By", value: msg.author.tag, inline: true },
             {
                 name: "Transcript",
