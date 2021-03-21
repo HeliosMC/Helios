@@ -79,32 +79,21 @@ module.exports = {
                 msg.channel.name,
                 "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
             );
-        if(args.length >= 2) {
-            ticketEmbed.addField("Reason", args.splice(1).join(" "), true);
-        }
-        ticketEmbed.addFields(
-            { name: "Username", value: username, inline: true },
-            { name: "Closed By", value: msg.author.tag, inline: true },
-            {
-                name: "Transcript",
-                value: `[Click here](${config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt)`,
-                inline: true,
-            }
-        );
-        await msg.guild.channels.cache
-            .find((channel) => channel.id === config.tickets.log)
-            .send(ticketEmbed);
 
         // Send a message to the ticket owner.
         if (args.length >= 2) {
             const ticketChannel = await mongoose.getTicketChannel(
                 msg.channel.id
             );
+
+            const reason = args.splice(1).join(" ");
+            ticketEmbed.addField("Reason", reason, true);
+
             const closedEmbed = new Discord.MessageEmbed()
                 .addFields(
                     {
                         name: "Reason",
-                        value: args.splice(1).join(" "),
+                        value: reason,
                         inline: true,
                     },
                     { name: "Closed By", value: msg.author.tag, inline: true },
@@ -122,6 +111,20 @@ module.exports = {
                 );
             msg.guild.members.cache.get(ticketChannel.userId).send(closedEmbed);
         }
+
+        // Log to transcript channel.
+        ticketEmbed.addFields(
+            { name: "Username", value: username, inline: true },
+            { name: "Closed By", value: msg.author.tag, inline: true },
+            {
+                name: "Transcript",
+                value: `[Click here](${config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt)`,
+                inline: true,
+            }
+        );
+        await msg.guild.channels.cache
+            .find((channel) => channel.id === config.tickets.log)
+            .send(ticketEmbed);
 
         // Delete the channel.
         msg.channel.delete();
