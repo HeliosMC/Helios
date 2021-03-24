@@ -71,9 +71,8 @@ module.exports = {
         // Get the top five.
         leaderboard = data;
 
-        let emoji = msg.guild.emojis.cache.find(
-            (emoji) => emoji.id === config.tickets.emoji
-        );
+        // Fetch the emoji from the id.
+        let emoji = msg.guild.emojis.cache.get(config.tickets.emoji);
 
         // Setup a string of data.
         let output = "";
