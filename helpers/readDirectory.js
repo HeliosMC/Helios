@@ -32,13 +32,8 @@ const fs = require("fs");
 module.exports = (path, extension, callback) => {
     fs.readdir(path, (err, files) => {
         files.forEach((file) => {
-            if (extension !== undefined) {
-                if (file.split(".")[1] == extension) {
-                    callback(file);
-                }
-            } else {
-                callback(file);
-            }
+            if (extension == null) return callback(file); // Ignore the extension check.
+            if (file.split(".")[1] == extension) callback(file);
         });
     });
 };

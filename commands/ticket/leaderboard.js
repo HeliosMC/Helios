@@ -34,7 +34,7 @@ module.exports = {
 
         // Grab the data from the mongodb.
         const result = await mongoose.fetchTicketChannels();
-        if (!result) return;
+        if (result == null) return;
 
         result.map((ticket) => {
             if (!ticket.closedBy || !ticket.userId) return;

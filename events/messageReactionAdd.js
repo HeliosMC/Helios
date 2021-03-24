@@ -92,7 +92,6 @@ module.exports = async (Helios, reaction, user) => {
 
     // Send a introduction message to the channel.
     const ticketEmbed = new Discord.MessageEmbed()
-        .setTitle("")
         .setDescription(`Support will be with you shortly.`)
         .setColor("#3498db")
         .setFooter(
