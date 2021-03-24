@@ -46,9 +46,14 @@ module.exports = {
         });
 
         // Create a leaderboard array.
-        let data = Object.keys(leaderboard).map((key) => {
+        let temp = Object.keys(leaderboard).filter((key) => {
+            return [key, leaderboard[key]];
+        });
+
+        // Check the staff permissions
+        let data = temp.filter(entry => {
             // Get the member object from the guild.
-            const member = msg.guild.members.cache.get(key);
+            const member = msg.guild.members.cache.get(entry[0]);
             if (member == null) return;
 
             // Check if they have a staff role.
@@ -59,8 +64,7 @@ module.exports = {
                 if (roles.includes(role.id)) foundRole = true;
             });
 
-            if (!foundRole) return;
-            return [key, leaderboard[key]];
+            return foundRole;
         });
 
         // Sort the leaderboard array.
