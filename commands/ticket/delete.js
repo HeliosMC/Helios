@@ -106,7 +106,9 @@ module.exports = {
                 msg.channel.name,
                 "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
             );
-        msg.guild.members.cache.get(ticketChannel.userId).send(closedEmbed);
+        await msg.guild.members.cache
+            .get(ticketChannel.userId)
+            .send(closedEmbed);
 
         // Log to transcript channel.
         ticketEmbed.addFields(
@@ -119,7 +121,7 @@ module.exports = {
             }
         );
         await msg.guild.channels.cache
-            .find((channel) => channel.id === config.tickets.log)
+            .get(config.tickets.log)
             .send(ticketEmbed);
 
         // Delete the channel.
