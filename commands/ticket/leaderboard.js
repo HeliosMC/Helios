@@ -47,6 +47,19 @@ module.exports = {
 
         // Create a leaderboard array.
         let data = Object.keys(leaderboard).map((key) => {
+            // Get the member object from the guild.
+            const member = msg.guild.members.cache.get(key);
+            if (member == null) return;
+
+            // Check if they have a staff role.
+            let roles = config.permissions["staff"];
+            let foundRole = false;
+
+            msg.member.roles.cache.map((role) => {
+                if (roles.includes(role.id)) foundRole = true;
+            });
+
+            if (!foundRole) return;
             return [key, leaderboard[key]];
         });
 
