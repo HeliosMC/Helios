@@ -46,25 +46,8 @@ module.exports = {
         });
 
         // Create a leaderboard array.
-        let temp = Object.keys(leaderboard).filter((key) => {
+        let data = Object.keys(leaderboard).map((key) => {
             return [key, leaderboard[key]];
-        });
-
-        // Check the staff permissions
-        let data = temp.filter(entry => {
-            // Get the member object from the guild.
-            const member = msg.guild.members.cache.get(entry[0]);
-            if (member == null) return;
-
-            // Check if they have a staff role.
-            let roles = config.permissions["staff"];
-            let foundRole = false;
-
-            msg.member.roles.cache.map((role) => {
-                if (roles.includes(role.id)) foundRole = true;
-            });
-
-            return foundRole;
         });
 
         // Sort the leaderboard array.
