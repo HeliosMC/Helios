@@ -71,20 +71,11 @@ module.exports = {
             )
         ).tag;
 
-        // Log the transcript to the channel.
-        const ticketEmbed = new Discord.MessageEmbed()
-            .addField("Username", username, true)
-            .setColor("#3498db")
-            .setTimestamp()
-            .setFooter(
-                msg.channel.name,
-                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
-            );
-
-        // Send a message to the ticket owner.
+        // Get the reason for closing the ticket.
         const reason = "Resolved.";
         if (args.length >= 2) reason = args.splice(1).join(" ");
 
+        // Send the closed embed to the ticket owner.
         const ticketChannel = await mongoose.getTicketChannel(msg.channel.id);
         const closedEmbed = new Discord.MessageEmbed()
             .addFields(
@@ -111,15 +102,23 @@ module.exports = {
             .send(closedEmbed);
 
         // Log to transcript channel.
-        ticketEmbed.addFields(
-            { name: "Reason", value: reason, inline: true },
-            { name: "Closed By", value: msg.author.tag, inline: true },
-            {
-                name: "Transcript",
-                value: `[Click here](${config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt)`,
-                inline: true,
-            }
-        );
+        const ticketEmbed = new Discord.MessageEmbed()
+            .addFields(
+                { name: "Reason", value: reason, inline: true },
+                { name: "Closed By", value: msg.author.tag, inline: true },
+                {
+                    name: "Transcript",
+                    value: `[Click here](${config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt)`,
+                    inline: true,
+                }
+            )
+            .addField("Username", username, true)
+            .setColor("#3498db")
+            .setTimestamp()
+            .setFooter(
+                msg.channel.name,
+                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
+            );
         await msg.guild.channels.cache
             .get(config.tickets.log)
             .send(ticketEmbed);
