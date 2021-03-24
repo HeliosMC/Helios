@@ -72,7 +72,7 @@ module.exports = {
         ).tag;
 
         // Get the reason for closing the ticket.
-        const reason = "Resolved.";
+        let reason = "Resolved.";
         if (args.length >= 2) reason = args.splice(1).join(" ");
 
         // Send the closed embed to the ticket owner.
