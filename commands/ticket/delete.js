@@ -82,39 +82,35 @@ module.exports = {
             );
 
         // Send a message to the ticket owner.
-        if (args.length >= 2) {
-            const ticketChannel = await mongoose.getTicketChannel(
-                msg.channel.id
+        const reason = "Resolved.";
+        if (args.length >= 2) reason = args.splice(1).join(" ");
+
+        const ticketChannel = await mongoose.getTicketChannel(msg.channel.id);
+        const closedEmbed = new Discord.MessageEmbed()
+            .addFields(
+                {
+                    name: "Reason",
+                    value: reason,
+                    inline: true,
+                },
+                { name: "Closed By", value: msg.author.tag, inline: true },
+                {
+                    name: "Transcript",
+                    value: `[Click here](${config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt)`,
+                    inline: true,
+                }
+            )
+            .setColor("#3498db")
+            .setTimestamp()
+            .setFooter(
+                msg.channel.name,
+                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
             );
-
-            const reason = args.splice(1).join(" ");
-            ticketEmbed.addField("Reason", reason, true);
-
-            const closedEmbed = new Discord.MessageEmbed()
-                .addFields(
-                    {
-                        name: "Reason",
-                        value: reason,
-                        inline: true,
-                    },
-                    { name: "Closed By", value: msg.author.tag, inline: true },
-                    {
-                        name: "Transcript",
-                        value: `[Click here](${config.tickets.web}${msg.guild.id}/${msg.channel.id}.txt)`,
-                        inline: true,
-                    }
-                )
-                .setColor("#3498db")
-                .setTimestamp()
-                .setFooter(
-                    msg.channel.name,
-                    "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
-                );
-            msg.guild.members.cache.get(ticketChannel.userId).send(closedEmbed);
-        }
+        msg.guild.members.cache.get(ticketChannel.userId).send(closedEmbed);
 
         // Log to transcript channel.
         ticketEmbed.addFields(
+            { name: "Reason", value: reason, inline: true },
             { name: "Closed By", value: msg.author.tag, inline: true },
             {
                 name: "Transcript",
