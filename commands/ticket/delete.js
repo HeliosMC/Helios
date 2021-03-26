@@ -97,7 +97,9 @@ module.exports = {
                 msg.channel.name,
                 "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
             );
-        await msg.guild.members.fetch(ticketChannel.userId).send(closedEmbed);
+        await msg.guild.members
+            .fetch(ticketChannel.userId)
+            .then((member) => member.send(closedEmbed));
 
         // Log to transcript channel.
         const ticketEmbed = new Discord.MessageEmbed()
