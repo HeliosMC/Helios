@@ -40,11 +40,6 @@ module.exports = {
             if (!ticket.closedBy || !ticket.userId) return;
             if (ticket.closedBy == ticket.userId) return;
 
-            let member = msg.guild.members.cache.get(ticket.closedBy);
-            if (!member) {
-                return;
-            }
-
             leaderboard[ticket.closedBy] = leaderboard[ticket.closedBy]
                 ? leaderboard[ticket.closedBy] + 1
                 : 1;
