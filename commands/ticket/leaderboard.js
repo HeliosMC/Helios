@@ -36,37 +36,13 @@ module.exports = {
         const result = await mongoose.fetchTicketChannels();
         if (result == null) return;
 
-        // Cache all the current staff members.
-        let cache = [];
-
         result.map((ticket) => {
             if (!ticket.closedBy || !ticket.userId) return;
             if (ticket.closedBy == ticket.userId) return;
 
-            let foundRole = cache.includes(ticket.closedBy);
-            if (!foundRole) {
-                let member = msg.guild.members.cache.get(ticket.closedBy);
-                if (!member) {
-                    return;
-                }
-
-                for (const id of config.permissions.staff) {
-                    foundRole = member.roles.cache.some(
-                        (role) => role.id === id
-                    );
-
-                    if (foundRole) {
-                        cache.push(ticket.closedBy);
-                        break;
-                    }
-                }
-            }
-
-            if (foundRole) {
-                leaderboard[ticket.closedBy] = leaderboard[ticket.closedBy]
-                    ? leaderboard[ticket.closedBy] + 1
-                    : 1;
-            }
+            leaderboard[ticket.closedBy] = leaderboard[ticket.closedBy]
+                ? leaderboard[ticket.closedBy] + 1
+                : 1;
         });
 
         // Create a leaderboard array.
