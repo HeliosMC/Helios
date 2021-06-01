@@ -46,6 +46,10 @@ module.exports = {
             let foundRole = cache.includes(ticket.closedBy);
             if (!foundRole) {
                 let member = msg.guild.members.cache.get(ticket.closedBy);
+                if (!member) {
+                    return;
+                }
+
                 for (const id of config.permissions.staff) {
                     foundRole = member.roles.cache.some(
                         (role) => role.id === id
