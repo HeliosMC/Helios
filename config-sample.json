@@ -8,7 +8,8 @@
         "web": "",
         "path": "",
         "emoji": "",
-        "log": ""
+        "log": "",
+        "parent": ""
     },
     "mongoConnection": ""
 }
