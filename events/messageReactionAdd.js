@@ -84,7 +84,7 @@ module.exports = async (Helios, reaction, user) => {
         `ticket-${pad(ticketIndex + 1, 4)}`,
         {
             permissionOverwrites,
-            parent: msg.guild.channels.get(Helios.config.tickets.parent),
+            parent: msg.guild.channels.cache.get(Helios.config.tickets.parent),
         }
     );
 
