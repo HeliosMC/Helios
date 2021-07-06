@@ -21,6 +21,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
+const Discord = require("discord.js");
 
 // https://stackoverflow.com/questions/10073699/pad-a-number-with-leading-zeros-in-javascript
 function pad(n, width, z) {
