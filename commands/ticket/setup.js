@@ -22,6 +22,7 @@
     SOFTWARE.
 */
 const Discord = require("discord.js");
+const { MessageButton, MessageActionRow } = require("discord-buttons");
 
 module.exports = {
     info: {
@@ -29,26 +30,40 @@ module.exports = {
         category: "ticket",
         permission: "founder",
     },
-    execute: async (msg, { config, mongoose }) => {
-        // TODO: Proper emoji configuration which saves in the database - i was too lazy.
-        let guildId = msg.guild.id;
-        let emoji = msg.guild.emojis.cache.find(
-            (emoji) => emoji.id === config.tickets.emoji
-        );
-
+    execute: async (msg, { mongoose }) => {
         const ticketEmbed = new Discord.MessageEmbed()
             .setTitle("Server Support")
-            .setDescription(
-                `React with the <:${emoji.name}:${emoji.id}> to create a ticket!`
-            )
+            .setDescription(`Choose the server to create a ticket for support.`)
             .setColor("#3498db")
             .setFooter(
                 "Your ticket will be located at the top of discord.",
                 "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
             );
-        let ticketMessage = await msg.channel.send(ticketEmbed);
-        ticketMessage.react(emoji);
 
-        await mongoose.updateTicketGuildMessage(guildId, ticketMessage.id);
+        const apolloButton = new MessageButton()
+            .setStyle("blurple")
+            .setLabel("Apollo")
+            .setID("ticket_apollo");
+        const artemisButton = new MessageButton()
+            .setStyle("blurple")
+            .setLabel("Artemis")
+            .setID("ticket_artemis");
+        const orpheusButton = new MessageButton()
+            .setStyle("blurple")
+            .setLabel("Orpheus")
+            .setID("ticket_orpheus");
+        const otherButton = new MessageButton()
+            .setStyle("gray")
+            .setLabel("Other")
+            .setID("ticket_other");
+        const row = new MessageActionRow().addComponents(
+            apolloButton,
+            artemisButton,
+            orpheusButton,
+            otherButton
+        );
+
+        let ticketMessage = await msg.channel.send(ticketEmbed, row);
+        await mongoose.updateTicketGuildMessage(msg.guild.id, ticketMessage.id);
     },
 };

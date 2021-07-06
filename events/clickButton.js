@@ -1,0 +1,98 @@
+/*
+    MIT License
+
+    Copyright (c) 2020 Aigars A
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+*/
+
+// https://stackoverflow.com/questions/10073699/pad-a-number-with-leading-zeros-in-javascript
+function pad(n, width, z) {
+    z = z || "0";
+    n = n + "";
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
+module.exports = async (Helios, button) => {
+    let mongoose = Helios.mongoose;
+    let msg = button.message;
+
+    await button.clicker.fetch();
+    let user = button.clicker.user;
+
+    if (
+        button.id === "ticket_apollo" ||
+        button.id === "ticket_artemis" ||
+        button.id === "ticket_orpheus" ||
+        button.id === "ticket_other"
+    ) {
+        await button.reply.defer();
+
+        // Check if this is a valid setup message.
+        const guildData = await mongoose.getTicketGuild(msg.guild.id);
+        if (!guildData || guildData.messageId !== msg.id) return;
+        let ticketIndex = guildData.ticketIndex;
+
+        // Check for an existing ticket.
+        let foundTicket =
+            msg.guild.channels.cache.filter(
+                (channel) =>
+                    channel.name.includes("ticket-") &&
+                    channel.permissionOverwrites.find(
+                        (permission) => permission.id === user.id
+                    )
+            ).size > 0;
+        if (foundTicket) return;
+
+        // Update the index.
+        await mongoose.updateTicketGuildIndex(msg.guild.id, ticketIndex + 1);
+
+        // Open a ticket as it does not exist.
+        let permissionOverwrites = [
+            {
+                id: msg.guild.roles.everyone.id,
+                deny: ["VIEW_CHANNEL"],
+            },
+            {
+                id: user.id,
+                allow: ["VIEW_CHANNEL"],
+            },
+        ];
+
+        Helios.config.permissions.staff.map((id) =>
+            permissionOverwrites.push({
+                id,
+                allow: ["VIEW_CHANNEL"],
+            })
+        );
+
+        let channel = await msg.guild.channels.create(
+            `ticket-${pad(ticketIndex + 1, 4)}-${button.id.split("_")[1]}`,
+            {
+                permissionOverwrites,
+                parent: msg.guild.channels.cache.get(
+                    Helios.config.tickets.parent
+                ),
+            }
+        );
+
+        // Save the ticket to the channels database.
+        await mongoose.saveTicketChannel(channel.id, user.id, user.tag);
+    }
+};

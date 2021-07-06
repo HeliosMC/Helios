@@ -24,6 +24,7 @@
 const Helios = new (require("./core/Helios"))({
     partials: ["MESSAGE", "CHANNEL", "REACTION"],
 });
+require("discord-buttons")(Helios);
 
 // Register all of the events/commands.
 (() => {

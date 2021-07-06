@@ -9,10 +9,11 @@
     "author": "Aigars",
     "license": "MIT",
     "dependencies": {
-        "axios": "^0.21.0",
-        "chalk": "^4.1.0",
-        "discord.js": "^12.5.1",
-        "mongoose": "^5.11.5",
-        "nodemon": "^2.0.6"
+        "axios": "^0.21.1",
+        "chalk": "^4.1.1",
+        "discord-buttons": "^4.0.0",
+        "discord.js": "^12.5.3",
+        "mongoose": "^5.13.2",
+        "nodemon": "^2.0.9"
     }
 }
