@@ -94,5 +94,15 @@ module.exports = async (Helios, button) => {
 
         // Save the ticket to the channels database.
         await mongoose.saveTicketChannel(channel.id, user.id, user.tag);
+
+        // Send a introduction message to the channel.
+        const ticketEmbed = new Discord.MessageEmbed()
+            .setDescription(`Support will be with you shortly.`)
+            .setColor("#3498db")
+            .setFooter(
+                "Please describe your issue while you wait!",
+                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
+            );
+        channel.send(`<@${user.id}>`, ticketEmbed);
     }
 };
