@@ -23,13 +23,6 @@
 */
 const Discord = require("discord.js");
 
-// https://stackoverflow.com/questions/10073699/pad-a-number-with-leading-zeros-in-javascript
-function pad(n, width, z) {
-    z = z || "0";
-    n = n + "";
-    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
-
 module.exports = async (Helios, button) => {
     let mongoose = Helios.mongoose;
     let msg = button.message;
@@ -62,7 +55,8 @@ module.exports = async (Helios, button) => {
         if (foundTicket) return;
 
         // Update the index.
-        await mongoose.updateTicketGuildIndex(msg.guild.id, ticketIndex + 1);
+        ticketIndex++;
+        await mongoose.updateTicketGuildIndex(msg.guild.id, ticketIndex);
 
         // Open a ticket as it does not exist.
         let permissionOverwrites = [
@@ -84,7 +78,9 @@ module.exports = async (Helios, button) => {
         );
 
         let channel = await msg.guild.channels.create(
-            `ticket-${pad(ticketIndex + 1, 4)}-${button.id.split("_")[1]}`,
+            `ticket-${ticketIndex.toString().padStart(4, 0)}-${
+                button.id.split("_")[1]
+            }`,
             {
                 permissionOverwrites,
                 parent: msg.guild.channels.cache.get(
