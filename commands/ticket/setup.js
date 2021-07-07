@@ -37,7 +37,7 @@ module.exports = {
             .setColor("#3498db")
             .setFooter(
                 "Your ticket will be located at the top of discord.",
-                user.defaultAvatarURL
+                user.avatarURL()
             );
 
         const apolloButton = new MessageButton()

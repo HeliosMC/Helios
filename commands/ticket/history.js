@@ -60,7 +60,7 @@ module.exports = {
             )
             .setFooter(
                 `You can access other pages by specifying the page number.`,
-                user.defaultAvatarURL
+                user.avatarURL()
             )
             .setColor("#3498db");
 

@@ -36,7 +36,7 @@ module.exports = {
             .setDescription(``)
             .setFooter(
                 `To be able to use a categorized command specify the category before the command.`,
-                user.defaultAvatarURL
+                user.avatarURL()
             )
             .setColor("#3498db");
 

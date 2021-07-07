@@ -98,7 +98,7 @@ module.exports = async (Helios, button) => {
             .setColor("#3498db")
             .setFooter(
                 "Please describe your issue while you wait!",
-                Helios.user.defaultAvatarURL
+                Helios.user.avatarURL()
             );
         channel.send(`<@${user.id}>`, ticketEmbed);
     }

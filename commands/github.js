@@ -33,7 +33,7 @@ module.exports = {
             .setDescription(
                 `Want to contribute to the project? [Click here](https://github.com/AAigars/Helios)`
             )
-            .setFooter(`Created by Luaa#0381 (Aigars A)`, user.defaultAvatarURL)
+            .setFooter(`Created by Luaa#0381 (Aigars A)`, user.avatarURL())
             .setColor("#3498db");
 
         // Send the embed.

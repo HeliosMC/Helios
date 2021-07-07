@@ -71,7 +71,7 @@ module.exports = {
 
         // Output the data with a embed.
         const leaderboardEmbed = new Discord.MessageEmbed()
-            .setAuthor(`Helios Ticket Leaderboard`, user.defaultAvatarURL)
+            .setAuthor(`Helios Ticket Leaderboard`, user.avatarURL())
             .setDescription(output)
             .setColor("#3498db");
         msg.channel.send(leaderboardEmbed);
