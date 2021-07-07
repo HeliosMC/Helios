@@ -27,16 +27,13 @@ module.exports = {
     info: {
         name: "github",
     },
-    execute: async (msg, {}, args) => {
+    execute: async (msg, { user }, args) => {
         // Create the embed.
         const githubEmbed = new Discord.MessageEmbed()
             .setDescription(
                 `Want to contribute to the project? [Click here](https://github.com/AAigars/Helios)`
             )
-            .setFooter(
-                `Created by Luaa#0381 (Aigars A)`,
-                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
-            )
+            .setFooter(`Created by Luaa#0381 (Aigars A)`, user.defaultAvatarURL)
             .setColor("#3498db");
 
         // Send the embed.

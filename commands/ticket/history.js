@@ -29,7 +29,7 @@ module.exports = {
         category: "ticket",
         permission: "staff",
     },
-    execute: async (msg, { config, mongoose }, args) => {
+    execute: async (msg, { config, mongoose, user }, args) => {
         // Get the user from the mentions.
         if (msg.mentions.members.size == 0)
             return msg.reply("You need to mention an user :man_facepalming:");
@@ -60,7 +60,7 @@ module.exports = {
             )
             .setFooter(
                 `You can access other pages by specifying the page number.`,
-                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
+                user.defaultAvatarURL
             )
             .setColor("#3498db");
 

@@ -29,7 +29,7 @@ module.exports = {
         category: "ticket",
         permission: "staff",
     },
-    execute: async (msg, { config, mongoose }) => {
+    execute: async (msg, { config, mongoose, user }) => {
         let leaderboard = {};
 
         // Grab the data from the mongodb.
@@ -71,10 +71,7 @@ module.exports = {
 
         // Output the data with a embed.
         const leaderboardEmbed = new Discord.MessageEmbed()
-            .setAuthor(
-                `Helios Ticket Leaderboard`,
-                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
-            )
+            .setAuthor(`Helios Ticket Leaderboard`, user.defaultAvatarURL)
             .setDescription(output)
             .setColor("#3498db");
         msg.channel.send(leaderboardEmbed);

@@ -27,7 +27,7 @@ module.exports = {
     info: {
         name: "help",
     },
-    execute: async (msg, { commands }, args) => {
+    execute: async (msg, { commands, user }, args) => {
         // Get all of the commands.
         commands = commands.get();
 
@@ -36,7 +36,7 @@ module.exports = {
             .setDescription(``)
             .setFooter(
                 `To be able to use a categorized command specify the category before the command.`,
-                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
+                user.defaultAvatarURL
             )
             .setColor("#3498db");
 

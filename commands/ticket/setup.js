@@ -30,14 +30,14 @@ module.exports = {
         category: "ticket",
         permission: "founder",
     },
-    execute: async (msg, { mongoose }) => {
+    execute: async (msg, { mongoose, user }) => {
         const ticketEmbed = new Discord.MessageEmbed()
             .setTitle("Server Support")
             .setDescription(`Choose the server to create a ticket for support.`)
             .setColor("#3498db")
             .setFooter(
                 "Your ticket will be located at the top of discord.",
-                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
+                user.defaultAvatarURL
             );
 
         const apolloButton = new MessageButton()
