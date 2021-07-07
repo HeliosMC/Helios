@@ -98,7 +98,7 @@ module.exports = async (Helios, button) => {
             .setColor("#3498db")
             .setFooter(
                 "Please describe your issue while you wait!",
-                "https://cdn.discordapp.com/avatars/771824383429050379/4c48fcc72ea0640c9a1b8709770f41bc.png"
+                Helios.user.defaultAvatarURL
             );
         channel.send(`<@${user.id}>`, ticketEmbed);
     }
