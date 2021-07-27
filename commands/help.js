@@ -33,7 +33,6 @@ module.exports = {
 
         // Create the embed.
         const commandEmbed = new Discord.MessageEmbed()
-            .setDescription(``)
             .setFooter(
                 `To be able to use a categorized command specify the category before the command.`,
                 user.avatarURL()

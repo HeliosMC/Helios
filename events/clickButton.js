@@ -30,12 +30,7 @@ module.exports = async (Helios, button) => {
     await button.clicker.fetch();
     let user = button.clicker.user;
 
-    if (
-        button.id === "ticket_apollo" ||
-        button.id === "ticket_artemis" ||
-        button.id === "ticket_orpheus" ||
-        button.id === "ticket_other"
-    ) {
+    if (button.id.startsWith("ticket_")) {
         await button.reply.defer();
 
         // Check if this is a valid setup message.
@@ -101,5 +96,25 @@ module.exports = async (Helios, button) => {
                 Helios.user.avatarURL()
             );
         channel.send(`<@${user.id}>`, ticketEmbed);
+    } else if (button.id.startsWith("server_")) {
+        await button.reply.defer();
+
+        // Get the role for the selected server.
+        let role = msg.guild.roles.cache.get(
+            Helios.config.roles[button.id.split("_")[1]]
+        );
+        if (!role) return;
+
+        // Get the guild member.
+        let member = await msg.guild.members.fetch(user.id);
+        if (!member) return;
+
+        // Check if the member already has the role.
+        if (member.roles.cache.has(role.id)) {
+            return;
+        }
+
+        // Add the role to the user.
+        member.roles.add(role);
     }
 };
