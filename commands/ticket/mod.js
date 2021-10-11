@@ -37,7 +37,7 @@ module.exports = {
             );
 
         // Move the channel to be under the category.
-        msg.channel.setParent(config.tickets.parents.moderator);
+        msg.channel.setParent(config.tickets.parents.moderator, { lockPermissions: false });
 
         // Create a embed for the response.
         const moveEmbed = new Discord.MessageEmbed()
