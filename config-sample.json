@@ -9,7 +9,12 @@
         "path": "",
         "emoji": "",
         "log": "",
-        "parent": ""
+        "parents": {
+            "default": "",
+            "helper": "",
+            "moderator": "",
+            "admin": ""
+        }
     },
     "mongoConnection": ""
 }

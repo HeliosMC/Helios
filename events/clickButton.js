@@ -79,7 +79,7 @@ module.exports = async (Helios, button) => {
             {
                 permissionOverwrites,
                 parent: msg.guild.channels.cache.get(
-                    Helios.config.tickets.parent
+                    Helios.config.tickets.parents.default
                 ),
             }
         );
