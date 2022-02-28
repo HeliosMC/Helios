@@ -40,26 +40,16 @@ module.exports = {
                 user.avatarURL()
             );
 
-        const apolloButton = new MessageButton()
+        const survivalButton = new MessageButton()
             .setStyle("blurple")
-            .setLabel("Apollo")
-            .setID("ticket_apollo");
-        const artemisButton = new MessageButton()
-            .setStyle("blurple")
-            .setLabel("Artemis")
-            .setID("ticket_artemis");
-        const orpheusButton = new MessageButton()
-            .setStyle("blurple")
-            .setLabel("Orpheus")
-            .setID("ticket_orpheus");
+            .setLabel("Survival")
+            .setID("ticket_survival");
         const otherButton = new MessageButton()
             .setStyle("gray")
             .setLabel("Other")
             .setID("ticket_other");
         const row = new MessageActionRow().addComponents(
-            apolloButton,
-            artemisButton,
-            orpheusButton,
+            survivalButton,
             otherButton
         );
 
